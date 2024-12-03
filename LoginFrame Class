@@ -1,4 +1,4 @@
-package EastMotel;
+package EastRent;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -31,12 +31,11 @@ public class LoginFrame extends JFrame {
         // Tambahkan logo username di atas field
         JLabel usernameLogoLabel = new JLabel();
         usernameLogoLabel.setIcon(new ImageIcon(
-                new ImageIcon("D:/Download/Eastmotel666.png") // Ganti dengan path ke file gambar
-                        .getImage().getScaledInstance(230, 110, Image.SCALE_SMOOTH) // Atur ukuran logo
+                new ImageIcon("D:/Download/LogoEastRent.png") // Ganti dengan path ke file gambar
+                        .getImage().getScaledInstance(250, 130, Image.SCALE_SMOOTH) // Atur ukuran logo
         ));
         usernameLogoLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Tengah
         mainPanel.add(usernameLogoLabel); // Tambahkan logo ke mainPanel
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spasi di bawah logo
 
         // GridBagLayout panel untuk username dan password field
         JPanel fieldsPanel = new JPanel();
@@ -170,8 +169,24 @@ public class LoginFrame extends JFrame {
         loginButton.setBorderPainted(false);
 
         // Action listener for login button
+        // Action listener for login button
         loginButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "Login Button Clicked!");
+            String username = usernameField.getText().trim();
+            String password = new String(passwordField.getPassword()).trim();
+
+            // Validasi apakah username dan password sudah diisi
+            if (username.equals("") || username.equals("Username")) {
+                JOptionPane.showMessageDialog(this, "Harap masukkan username!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (password.equals("") || password.equals("Password")) {
+                JOptionPane.showMessageDialog(this, "Harap masukkan password!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Jika validasi berhasil
+            JOptionPane.showMessageDialog(this, "Login Berhasil!");
         });
 
         // Menambahkan loginButton di tengah-tengah bawah mainPanel
