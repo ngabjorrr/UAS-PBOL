@@ -1,4 +1,4 @@
-package EastMotel;
+package EastRent;
 
 import java.awt.*;
 import java.awt.event.*; // Add this import
