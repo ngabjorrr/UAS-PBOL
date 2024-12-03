@@ -1,0 +1,104 @@
+package Project;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+
+public class RentalFrame {
+    public static void main(String[] args) {
+        // Membuat frame utama
+        JFrame frame = new JFrame("Vehicle Rental App");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+        frame.setLayout(new BorderLayout());
+
+        // Panel atas untuk dropdown
+        JPanel topPanel = new JPanel(new FlowLayout());
+        JLabel categoryLabel = new JLabel("Category:");
+        String[] categoryOptions = {"All", "Motorcycle", "Car"};
+        JComboBox<String> categoryDropdown = new JComboBox<>(categoryOptions);
+        topPanel.add(categoryLabel);
+        topPanel.add(categoryDropdown);
+
+        // Panel tengah untuk menampilkan kendaraan
+        JPanel displayPanel = new JPanel();
+        displayPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
+
+        // Contoh data kendaraan (nama kendaraan, harga, path gambar)
+        String[][] vehicles = {
+            {"Canis Kamacho", "$345,000", "images/canis_kamacho.jpg", "Car"},
+            {"Albany Hermes", "$450,000", "images/albany_hermes.jpg", "Car"},
+            {"Benefactor Streiter", "$375,000", "images/benefactor_streiter.jpg", "Car"},
+            {"Pegassi Bati 801", "$80,000", "images/pegassi_bati_801.jpg", "Motorcycle"},
+            {"Shitzu Hakuchou", "$82,000", "images/shitzu_hakuchou.jpg", "Motorcycle"},
+            {"Declasse Yosemite", "$485,000", "images/declasse_yosemite.jpg", "Car"}
+        };
+
+        // Tambahkan semua kendaraan ke panel tengah secara default
+        for (String[] vehicle : vehicles) {
+            JPanel vehiclePanel = createVehiclePanel(vehicle[0], vehicle[1], vehicle[2]);
+            displayPanel.add(vehiclePanel);
+        }
+
+        // Tambahkan panel ke frame
+        frame.add(topPanel, BorderLayout.NORTH);
+        frame.add(displayPanel, BorderLayout.CENTER);
+
+        // Listener untuk dropdown kategori
+        categoryDropdown.addActionListener(e -> {
+            String selectedCategory = (String) categoryDropdown.getSelectedItem();
+            displayPanel.removeAll();
+
+            // Filter kendaraan berdasarkan kategori
+            for (String[] vehicle : vehicles) {
+                if (selectedCategory.equals("All") || selectedCategory.equals(vehicle[3])) {
+                    JPanel vehiclePanel = createVehiclePanel(vehicle[0], vehicle[1], vehicle[2]);
+                    displayPanel.add(vehiclePanel);
+                }
+            }
+
+            displayPanel.revalidate();
+            displayPanel.repaint();
+        });
+
+        // Tampilkan frame
+        frame.setVisible(true);
+    }
+
+    // Fungsi untuk membuat panel kendaraan
+    private static JPanel createVehiclePanel(String name, String price, String imagePath) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setPreferredSize(new Dimension(200, 250)); // Ukuran tetap untuk setiap panel
+        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        // Label gambar
+        JLabel imageLabel;
+        File imageFile = new File(imagePath);
+
+        if (imageFile.exists()) {
+            ImageIcon imageIcon = new ImageIcon(imagePath);
+            Image scaledImage = imageIcon.getImage().getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+            imageLabel = new JLabel(new ImageIcon(scaledImage));
+        } else {
+            imageLabel = new JLabel("No Image");
+            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            imageLabel.setOpaque(true);
+            imageLabel.setBackground(Color.LIGHT_GRAY);
+        }
+
+        // Panel bawah untuk teks (nama dan harga)
+        JPanel textPanel = new JPanel(new GridLayout(2, 1));
+        JLabel nameLabel = new JLabel(name, JLabel.CENTER);
+        JLabel priceLabel = new JLabel(price, JLabel.CENTER);
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        priceLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        textPanel.add(nameLabel);
+        textPanel.add(priceLabel);
+
+        // Tambahkan komponen ke panel
+        panel.add(imageLabel, BorderLayout.CENTER);
+        panel.add(textPanel, BorderLayout.SOUTH);
+
+        return panel;
+    }
+}
