@@ -1,0 +1,111 @@
+package Project;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+public class RentalFrame {
+
+    public static void main(String[] args) {
+        // Simulasi data kendaraan dengan stok
+        ArrayList<String[]> vehicles = new ArrayList<>();
+        vehicles.add(new String[]{"Canis Kamacho", "$345,000", "10", "Car"});
+        vehicles.add(new String[]{"Albany Hermes", "$450,000", "5", "Car"});
+        vehicles.add(new String[]{"Benefactor Streiter", "$375,000", "8", "Car"});
+        vehicles.add(new String[]{"Pegassi Bati 801", "$80,000", "15", "Motorcycle"});
+        vehicles.add(new String[]{"Shitzu Hakuchou", "$82,000", "12", "Motorcycle"});
+        vehicles.add(new String[]{"Declasse Yosemite", "$485,000", "6", "Car"});
+
+        // Membuat frame utama
+        JFrame frame = new JFrame("Admin Panel - Vehicle Rental App");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+        frame.setLayout(new BorderLayout());
+
+        // Panel atas untuk tombol aksi
+        JPanel topPanel = new JPanel(new FlowLayout());
+        JButton checkStockButton = new JButton("Check Stock");
+        JButton addVehicleButton = new JButton("Add Vehicle");
+        topPanel.add(checkStockButton);
+        topPanel.add(addVehicleButton);
+
+        // Panel tengah untuk konten dinamis
+        JPanel contentPanel = new JPanel(new BorderLayout());
+
+        // Listener untuk memeriksa stok kendaraan
+        checkStockButton.addActionListener(e -> {
+            contentPanel.removeAll();
+
+            // Tabel untuk menampilkan stok kendaraan
+            String[] columnNames = {"Name", "Price", "Stock", "Category"};
+            JTable stockTable = new JTable(vehicles.toArray(new String[0][0]), columnNames);
+            JScrollPane scrollPane = new JScrollPane(stockTable);
+
+            contentPanel.add(scrollPane, BorderLayout.CENTER);
+            contentPanel.revalidate();
+            contentPanel.repaint();
+        });
+
+        // Listener untuk menambah kendaraan baru
+        addVehicleButton.addActionListener(e -> {
+            contentPanel.removeAll();
+
+            // Form input kendaraan baru
+            JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+            formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+            JTextField nameField = new JTextField();
+            JTextField priceField = new JTextField();
+            JTextField stockField = new JTextField();
+            String[] categoryOptions = {"Car", "Motorcycle"};
+            JComboBox<String> categoryDropdown = new JComboBox<>(categoryOptions);
+
+            formPanel.add(new JLabel("Vehicle Name:"));
+            formPanel.add(nameField);
+            formPanel.add(new JLabel("Price:"));
+            formPanel.add(priceField);
+            formPanel.add(new JLabel("Stock:"));
+            formPanel.add(stockField);
+            formPanel.add(new JLabel("Category:"));
+            formPanel.add(categoryDropdown);
+
+            JButton submitButton = new JButton("Add Vehicle");
+            formPanel.add(submitButton);
+
+            contentPanel.add(formPanel, BorderLayout.CENTER);
+
+            // Listener untuk tombol submit
+            submitButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String name = nameField.getText();
+                    String price = priceField.getText();
+                    String stock = stockField.getText();
+                    String category = (String) categoryDropdown.getSelectedItem();
+
+                    if (!name.isEmpty() && !price.isEmpty() && !stock.isEmpty()) {
+                        vehicles.add(new String[]{name, price, stock, category});
+                        JOptionPane.showMessageDialog(frame, "Vehicle added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        nameField.setText("");
+                        priceField.setText("");
+                        stockField.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Please fill out all fields!", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
+
+            contentPanel.revalidate();
+            contentPanel.repaint();
+        });
+
+        // Tambahkan panel ke frame
+        frame.add(topPanel, BorderLayout.NORTH);
+        frame.add(contentPanel, BorderLayout.CENTER);
+
+        // Tampilkan frame
+        frame.setVisible(true);
+    }
+}
