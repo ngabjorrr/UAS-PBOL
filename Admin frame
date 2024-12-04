@@ -1,4 +1,4 @@
-package Project;
+package EastRent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,15 +24,22 @@ public class RentalFrame {
         frame.setSize(600, 400);
         frame.setLayout(new BorderLayout());
 
+        // Ubah warna latar belakang frame
+        frame.getContentPane().setBackground(new Color(68, 69, 198));
+
         // Panel atas untuk tombol aksi
         JPanel topPanel = new JPanel(new FlowLayout());
+        topPanel.setBackground(new Color(68, 69, 198)); // Warna latar belakang untuk topPanel
         JButton checkStockButton = new JButton("Check Stock");
+        
+        
         JButton addVehicleButton = new JButton("Add Vehicle");
         topPanel.add(checkStockButton);
         topPanel.add(addVehicleButton);
 
         // Panel tengah untuk konten dinamis
         JPanel contentPanel = new JPanel(new BorderLayout());
+        contentPanel.setBackground(new Color(68, 69, 198)); // Warna latar belakang untuk contentPanel
 
         // Listener untuk memeriksa stok kendaraan
         checkStockButton.addActionListener(e -> {
@@ -55,6 +62,7 @@ public class RentalFrame {
             // Form input kendaraan baru
             JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 10));
             formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            formPanel.setBackground(new Color(68, 69, 198)); // Warna latar belakang untuk formPanel
 
             JTextField nameField = new JTextField();
             JTextField priceField = new JTextField();
@@ -62,13 +70,22 @@ public class RentalFrame {
             String[] categoryOptions = {"Car", "Motorcycle"};
             JComboBox<String> categoryDropdown = new JComboBox<>(categoryOptions);
 
-            formPanel.add(new JLabel("Vehicle Name:"));
+            JLabel nameLabel = new JLabel("Vehicle Name:");
+            nameLabel.setForeground(Color.WHITE); // Warna teks agar terlihat pada background biru
+            JLabel priceLabel = new JLabel("Price:");
+            priceLabel.setForeground(Color.WHITE);
+            JLabel stockLabel = new JLabel("Stock:");
+            stockLabel.setForeground(Color.WHITE);
+            JLabel categoryLabel = new JLabel("Category:");
+            categoryLabel.setForeground(Color.WHITE);
+
+            formPanel.add(nameLabel);
             formPanel.add(nameField);
-            formPanel.add(new JLabel("Price:"));
+            formPanel.add(priceLabel);
             formPanel.add(priceField);
-            formPanel.add(new JLabel("Stock:"));
+            formPanel.add(stockLabel);
             formPanel.add(stockField);
-            formPanel.add(new JLabel("Category:"));
+            formPanel.add(categoryLabel);
             formPanel.add(categoryDropdown);
 
             JButton submitButton = new JButton("Add Vehicle");
