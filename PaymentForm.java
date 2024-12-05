@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class PaymentForm extends JFrame {
 
@@ -68,11 +70,11 @@ public class PaymentForm extends JFrame {
         // Payment Options
         JPanel paymentPanel = new JPanel();
         paymentPanel.setBackground(new Color(85, 85, 220));
-        paymentPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(85, 85, 220)), 
-                                                                "Metode Pembayaran :",
-                                                                0, 0, 
-                                                                new Font("Arial", Font.BOLD, 12), 
-                                                                Color.YELLOW));
+        paymentPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(85, 85, 220)),
+                "Metode Pembayaran :",
+                0, 0,
+                new Font("Arial", Font.BOLD, 12),
+                Color.YELLOW));
         paymentPanel.setLayout(new GridLayout(2, 1, 10, 5));
 
         cashPayment = new JRadioButton("Bayar di Lokasi");
@@ -81,7 +83,6 @@ public class PaymentForm extends JFrame {
         paymentGroup.add(cashPayment);
         paymentGroup.add(transferPayment);
 
-        // Set font color for radio buttons
         cashPayment.setForeground(Color.WHITE);
         cashPayment.setBackground(new Color(85, 85, 220));
         transferPayment.setForeground(Color.WHITE);
@@ -89,6 +90,33 @@ public class PaymentForm extends JFrame {
 
         paymentPanel.add(cashPayment);
         paymentPanel.add(transferPayment);
+
+        // Event listener untuk transferPayment
+        transferPayment.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Menampilkan daftar rekening saat transfer dipilih
+                if (transferPayment.isSelected()) {
+                    String[] bankAccounts = {
+                            "Bank BCA - 1234567890 a.n. EastRent",
+                            "Bank Mandiri - 0987654321 a.n. EastRent",
+                            "Bank BRI - 1122334455 a.n. EastRent"
+                    };
+
+                    StringBuilder message = new StringBuilder("Silakan transfer ke salah satu rekening berikut:\n");
+                    for (String account : bankAccounts) {
+                        message.append(account).append("\n");
+                    }
+
+                    JOptionPane.showMessageDialog(
+                            PaymentForm.this,
+                            message.toString(),
+                            "Informasi Rekening Bank",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                }
+            }
+        });
 
         formPanel.add(paymentPanel);
         mainPanel.add(formPanel, BorderLayout.CENTER);
@@ -138,7 +166,7 @@ public class PaymentForm extends JFrame {
     private JPanel createFieldPanel(String placeholder, JTextField textField) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panel.setBackground(Color.WHITE);
-        panel.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1, true)); // Rounded border
+        panel.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1, true));
 
         textField.setText(placeholder);
         textField.setForeground(Color.GRAY);
@@ -167,11 +195,11 @@ public class PaymentForm extends JFrame {
 
     private boolean validateInput() {
         if (vehicleNameField.getText().isEmpty() || vehicleNameField.getText().equals("Nama Kendaraan") ||
-            priceField.getText().isEmpty() || priceField.getText().equals("Harga (Per Hari)") ||
-            rentalDaysField.getText().isEmpty() || rentalDaysField.getText().equals("Jumlah Hari Sewa") ||
-            nameField.getText().isEmpty() || nameField.getText().equals("Nama Anda") ||
-            ktpField.getText().isEmpty() || ktpField.getText().equals("Nomor KTP") ||
-            phoneField.getText().isEmpty() || phoneField.getText().equals("Nomor Telepon")) {
+                priceField.getText().isEmpty() || priceField.getText().equals("Harga (Per Hari)") ||
+                rentalDaysField.getText().isEmpty() || rentalDaysField.getText().equals("Jumlah Hari Sewa") ||
+                nameField.getText().isEmpty() || nameField.getText().equals("Nama Anda") ||
+                ktpField.getText().isEmpty() || ktpField.getText().equals("Nomor KTP") ||
+                phoneField.getText().isEmpty() || phoneField.getText().equals("Nomor Telepon")) {
             JOptionPane.showMessageDialog(this, "Semua kolom harus diisi!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
