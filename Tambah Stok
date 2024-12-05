@@ -1,0 +1,126 @@
+package EastRent;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+public class RentalFrame {
+
+    public static void main(String[] args) {
+        // Simulasi data kendaraan dengan stok
+        ArrayList<String[]> vehicles = new ArrayList<>();
+        vehicles.add(new String[]{"Canis Kamacho", "Rp345.000", "10", "Mobil"});
+        vehicles.add(new String[]{"Albany Hermes", "Rp450.000", "5", "Mobil"});
+        vehicles.add(new String[]{"Benefactor Streiter", "Rp375.000", "8", "Mobil"});
+        vehicles.add(new String[]{"Pegassi Bati 801", "Rp80.000", "15", "Motor"});
+        vehicles.add(new String[]{"Shitzu Hakuchou", "Rp82.000", "12", "Motor"});
+        vehicles.add(new String[]{"Declasse Yosemite", "Rp485.000", "6", "Mobil"});
+
+        // Membuat frame utama
+        JFrame frame = new JFrame("Admin - Aplikasi Sewa Kendaraan");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+        frame.setLayout(new BorderLayout());
+
+        // Ubah warna latar belakang frame
+        frame.getContentPane().setBackground(new Color(68, 69, 198));
+
+        // Panel atas untuk tombol aksi
+        JPanel topPanel = new JPanel(new FlowLayout());
+        topPanel.setBackground(new Color(68, 69, 198)); // Warna latar belakang untuk topPanel
+        JButton checkStockButton = new JButton("Cek Stok");
+        JButton addVehicleButton = new JButton("Tambah Kendaraan");
+        topPanel.add(checkStockButton);
+        topPanel.add(addVehicleButton);
+
+        // Panel tengah untuk konten dinamis
+        JPanel contentPanel = new JPanel(new BorderLayout());
+        contentPanel.setBackground(new Color(68, 69, 198)); // Warna latar belakang untuk contentPanel
+
+        // Listener untuk memeriksa stok kendaraan
+        checkStockButton.addActionListener(e -> {
+            contentPanel.removeAll();
+
+            // Tabel untuk menampilkan stok kendaraan
+            String[] columnNames = {"Nama", "Harga", "Stok", "Kategori"};
+            JTable stockTable = new JTable(vehicles.toArray(new String[0][0]), columnNames);
+            JScrollPane scrollPane = new JScrollPane(stockTable);
+
+            contentPanel.add(scrollPane, BorderLayout.CENTER);
+            contentPanel.revalidate();
+            contentPanel.repaint();
+        });
+
+        // Listener untuk menambah kendaraan baru
+        addVehicleButton.addActionListener(e -> {
+            contentPanel.removeAll();
+
+            // Form input kendaraan baru
+            JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+            formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            formPanel.setBackground(new Color(68, 69, 198)); // Warna latar belakang untuk formPanel
+
+            JTextField nameField = new JTextField();
+            JTextField priceField = new JTextField();
+            JTextField stockField = new JTextField();
+            String[] categoryOptions = {"Mobil", "Motor"};
+            JComboBox<String> categoryDropdown = new JComboBox<>(categoryOptions);
+
+            JLabel nameLabel = new JLabel("Nama Kendaraan:");
+            nameLabel.setForeground(Color.WHITE); // Warna teks agar terlihat pada background biru
+            JLabel priceLabel = new JLabel("Harga:");
+            priceLabel.setForeground(Color.WHITE);
+            JLabel stockLabel = new JLabel("Stok:");
+            stockLabel.setForeground(Color.WHITE);
+            JLabel categoryLabel = new JLabel("Kategori:");
+            categoryLabel.setForeground(Color.WHITE);
+
+            formPanel.add(nameLabel);
+            formPanel.add(nameField);
+            formPanel.add(priceLabel);
+            formPanel.add(priceField);
+            formPanel.add(stockLabel);
+            formPanel.add(stockField);
+            formPanel.add(categoryLabel);
+            formPanel.add(categoryDropdown);
+
+            JButton submitButton = new JButton("Tambah Kendaraan");
+            formPanel.add(submitButton);
+
+            contentPanel.add(formPanel, BorderLayout.CENTER);
+
+            // Listener untuk tombol submit
+            submitButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String name = nameField.getText();
+                    String price = priceField.getText();
+                    String stock = stockField.getText();
+                    String category = (String) categoryDropdown.getSelectedItem();
+
+                    if (!name.isEmpty() && !price.isEmpty() && !stock.isEmpty()) {
+                        vehicles.add(new String[]{name, price, stock, category});
+                        JOptionPane.showMessageDialog(frame, "Kendaraan berhasil ditambahkan!", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+                        nameField.setText("");
+                        priceField.setText("");
+                        stockField.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Harap isi semua bidang!", "Kesalahan", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
+
+            contentPanel.revalidate();
+            contentPanel.repaint();
+        });
+
+        // Tambahkan panel ke frame
+        frame.add(topPanel, BorderLayout.NORTH);
+        frame.add(contentPanel, BorderLayout.CENTER);
+
+        // Tampilkan frame
+        frame.setVisible(true);
+    }
+}
